@@ -1,54 +1,49 @@
 package assertions;
 
+import constants.ErrorMessages;
 import io.qameta.allure.Step;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import pages.LoginPage;
+import pages.ProductsPage;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 
 public class LoginAssertions {
 
     @Step("Проверка успешного логина")
-    public void assertLoginCorrect(WebDriverWait wait) {
+    public void assertLoginCorrect(WebDriver driver) {
+        ProductsPage productsPage = new ProductsPage(driver);
+        assertThat(productsPage.isPageOpened())
+                .withFailMessage("Логин не удался - страница продуктов не открылась")
+                .isTrue();
+    }
 
-        WebElement pageTitle = wait.until(
-                ExpectedConditions.visibilityOfElementLocated(By.className("title"))
-        );
-        String titleText = pageTitle.getText();
-        assertTrue(titleText.equals("Products"),
-                "Заголовок должен быть 'Products', текущий: " + titleText);
+    @Step("Проверка ошибки: {expectedError}")
+    public void assertLoginError(WebDriver driver, String expectedError) {
+        LoginPage loginPage = new LoginPage(driver);
+        assertThat(loginPage.getErrorMessageText())
+                .withFailMessage("Ожидалась ошибка: " + expectedError)
+                .contains(expectedError);
     }
 
     @Step("Проверка неверного логина")
     public void assertLoginWrong(WebDriver driver) {
-        String errorMessage = driver.findElement(
-                By.xpath("//h3[@data-test='error']")).getText();
+        assertLoginError(driver, ErrorMessages.WRONG_PASSWORD);
 
-        assertTrue(errorMessage.contains("Username and password do not match"),
-                "Ожидалась ошибка о неверном пароле, получено: " + errorMessage);
     }
 
     @Step("Проверка заблокированного пользователя")
     public void assertBlockedUser(WebDriver driver) {
-        String errorMessage = driver.findElement(By.xpath("//h3[@data-test='error']")).getText();
-
-        assertTrue(errorMessage.contains("Epic sadface: Sorry, this user has been locked out."),
-                "Ожидалась ошибка о блокировке пользователя, получено: " + errorMessage);
+        assertLoginError(driver, ErrorMessages.LOCKED_OUT_USER);
     }
 
-    @Step("Проверка путых строк")
+    @Step("Проверка пустых полей")
     public void assertEmptyStrings(WebDriver driver) {
-        // Проверяем ошибку
-        String errorMessage = driver.findElement(
-                By.xpath("//h3[@data-test='error']")
-        ).getText();
-
-        assertTrue(errorMessage.contains("Username is required"),
-                "Ожидалась ошибка о необходимости имени пользователя, получено: " + errorMessage);
+        assertLoginError(driver, ErrorMessages.USERNAME_REQUIRED);
     }
 }
+
 
 

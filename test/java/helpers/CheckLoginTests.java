@@ -30,7 +30,7 @@ public class CheckLoginTests extends BaseTest implements DataForLoginTests {
      */
     public void execute(LoginTestsSource testsSource) {
         commonMethod(testsSource);
-        loginAssertions.assertLoginCorrect(afterSearch.getWait());
+        loginAssertions.assertLoginCorrect(chromeDriver);
     }
 
     /**
@@ -67,7 +67,7 @@ public class CheckLoginTests extends BaseTest implements DataForLoginTests {
         loginPage.login(testsSource.login(), testsSource.password());
         long endTime = System.currentTimeMillis();
 
-        loginAssertions.assertLoginCorrect(afterSearch.getWait());
+        loginAssertions.assertLoginCorrect(chromeDriver);
         return endTime - startTime;
     }
 }
