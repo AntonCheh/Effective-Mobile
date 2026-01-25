@@ -2,6 +2,7 @@ package helpers;
 
 import assertions.LoginAssertions;
 
+import constants.Messages;
 import pages.LoginPage;
 import sources.DataForLoginTests;
 import sources.LoginTestsSource;
@@ -30,7 +31,7 @@ public class CheckLoginTests extends BaseTest implements DataForLoginTests {
      */
     public void execute(LoginTestsSource testsSource) {
         commonMethod(testsSource);
-        loginAssertions.assertLoginCorrect(driver);
+        loginAssertions.assertLoginCorrect(driver, testsSource.login(), testsSource.password());
     }
 
     /**
@@ -38,7 +39,7 @@ public class CheckLoginTests extends BaseTest implements DataForLoginTests {
      */
     public void executeLoginIncorrect(LoginTestsSource testsSource) {
         commonMethod(testsSource);
-        loginAssertions.assertLoginWrong(driver);
+        loginAssertions.assertLoginWrong(driver, Messages.WRONG_PASSWORD);
     }
 
     /**
@@ -46,7 +47,7 @@ public class CheckLoginTests extends BaseTest implements DataForLoginTests {
      */
     public void executeBlockedUser(LoginTestsSource testsSource) {
         commonMethod(testsSource);
-        loginAssertions.assertBlockedUser(driver);
+        loginAssertions.assertBlockedUser(driver, testsSource.login(), Messages.LOCKED_OUT_USER);
     }
 
     /**
@@ -54,7 +55,7 @@ public class CheckLoginTests extends BaseTest implements DataForLoginTests {
      */
     public void executeEmpty(LoginTestsSource testsSource) {
         commonMethod(testsSource);
-        loginAssertions.assertEmptyStrings(driver);
+        loginAssertions.assertEmptyStrings(driver, Messages.USERNAME_REQUIRED);
     }
 
     /**
@@ -67,7 +68,7 @@ public class CheckLoginTests extends BaseTest implements DataForLoginTests {
         loginPage.login(testsSource.login(), testsSource.password());
         long endTime = System.currentTimeMillis();
 
-        loginAssertions.assertLoginCorrect(driver);
+        loginAssertions.assertLoginCorrect(driver, testsSource.login(), testsSource.password());
         return endTime - startTime;
     }
 }

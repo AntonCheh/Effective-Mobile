@@ -12,8 +12,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class LoginAssertions {
 
-    @Step("Проверка успешного логина")
-    public void assertLoginCorrect(WebDriver driver) {
+    @Step("Проверка регистрации при вводе корректных данных {user} : {password}")
+    public void assertLoginCorrect(WebDriver driver, String user, String password) {
         ProductsPage productsPage = new ProductsPage(driver);
         assertThat(productsPage.isPageOpened())
                 .withFailMessage("Логин не удался - страница продуктов не открылась")
@@ -28,20 +28,20 @@ public class LoginAssertions {
                 .contains(expectedError);
     }
 
-    @Step("Проверка неверного логина")
-    public void assertLoginWrong(WebDriver driver) {
-        assertLoginError(driver, Messages.WRONG_PASSWORD);
+    @Step("Проверка логина с неверным паролем, ожидаем ошибку - {message}")
+    public void assertLoginWrong(WebDriver driver, String message) {
+        assertLoginError(driver, message);
 
     }
 
-    @Step("Проверка заблокированного пользователя")
-    public void assertBlockedUser(WebDriver driver) {
-        assertLoginError(driver, Messages.LOCKED_OUT_USER);
+    @Step("Проверка заблокированного пользователя - {user}")
+    public void assertBlockedUser(WebDriver driver, String user, String message) {
+        assertLoginError(driver, message);
     }
 
-    @Step("Проверка пустых полей")
-    public void assertEmptyStrings(WebDriver driver) {
-        assertLoginError(driver, Messages.USERNAME_REQUIRED);
+    @Step("Проверка регистрации при оставлении пустых полей, ожидаем ошибку - {message} ")
+    public void assertEmptyStrings(WebDriver driver, String message) {
+        assertLoginError(driver, message);
     }
 }
 
