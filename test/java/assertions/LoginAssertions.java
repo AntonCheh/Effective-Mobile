@@ -1,6 +1,6 @@
 package assertions;
 
-import constants.ErrorMessages;
+import constants.Messages;
 import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 
@@ -30,18 +30,18 @@ public class LoginAssertions {
 
     @Step("Проверка неверного логина")
     public void assertLoginWrong(WebDriver driver) {
-        assertLoginError(driver, ErrorMessages.WRONG_PASSWORD);
+        assertLoginError(driver, Messages.WRONG_PASSWORD);
 
     }
 
     @Step("Проверка заблокированного пользователя")
     public void assertBlockedUser(WebDriver driver) {
-        assertLoginError(driver, ErrorMessages.LOCKED_OUT_USER);
+        assertLoginError(driver, Messages.LOCKED_OUT_USER);
     }
 
     @Step("Проверка пустых полей")
     public void assertEmptyStrings(WebDriver driver) {
-        assertLoginError(driver, ErrorMessages.USERNAME_REQUIRED);
+        assertLoginError(driver, Messages.USERNAME_REQUIRED);
     }
 }
 

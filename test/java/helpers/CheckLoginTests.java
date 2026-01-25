@@ -21,7 +21,7 @@ public class CheckLoginTests extends BaseTest implements DataForLoginTests {
     }
 
     public void commonMethod (LoginTestsSource testsSource) {
-        LoginPage loginPage = new LoginPage(chromeDriver);
+        LoginPage loginPage = new LoginPage(driver);
         loginPage.login(testsSource.login(), testsSource.password());
     }
 
@@ -30,7 +30,7 @@ public class CheckLoginTests extends BaseTest implements DataForLoginTests {
      */
     public void execute(LoginTestsSource testsSource) {
         commonMethod(testsSource);
-        loginAssertions.assertLoginCorrect(chromeDriver);
+        loginAssertions.assertLoginCorrect(driver);
     }
 
     /**
@@ -38,7 +38,7 @@ public class CheckLoginTests extends BaseTest implements DataForLoginTests {
      */
     public void executeLoginIncorrect(LoginTestsSource testsSource) {
         commonMethod(testsSource);
-        loginAssertions.assertLoginWrong(chromeDriver);
+        loginAssertions.assertLoginWrong(driver);
     }
 
     /**
@@ -46,7 +46,7 @@ public class CheckLoginTests extends BaseTest implements DataForLoginTests {
      */
     public void executeBlockedUser(LoginTestsSource testsSource) {
         commonMethod(testsSource);
-        loginAssertions.assertBlockedUser(chromeDriver);
+        loginAssertions.assertBlockedUser(driver);
     }
 
     /**
@@ -54,20 +54,20 @@ public class CheckLoginTests extends BaseTest implements DataForLoginTests {
      */
     public void executeEmpty(LoginTestsSource testsSource) {
         commonMethod(testsSource);
-        loginAssertions.assertEmptyStrings(chromeDriver);
+        loginAssertions.assertEmptyStrings(driver);
     }
 
     /**
      * 5. Логин performance_glitch_user (с замером времени)
      */
     public long executePerformanceGlitch(LoginTestsSource testsSource) {
-        LoginPage loginPage = new LoginPage(chromeDriver);
+        LoginPage loginPage = new LoginPage(driver);
 
         long startTime = System.currentTimeMillis();
         loginPage.login(testsSource.login(), testsSource.password());
         long endTime = System.currentTimeMillis();
 
-        loginAssertions.assertLoginCorrect(chromeDriver);
+        loginAssertions.assertLoginCorrect(driver);
         return endTime - startTime;
     }
 }

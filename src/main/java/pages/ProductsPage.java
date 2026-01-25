@@ -9,6 +9,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
+import static constants.Messages.PRODUCTS_PAGE_TITLE;
+
 public class ProductsPage {
     private final WebDriver driver;
     private final WebDriverWait wait;
@@ -25,7 +27,7 @@ public class ProductsPage {
     public boolean isPageOpened() {
         try {
             return wait.until(ExpectedConditions.visibilityOf(pageTitle)).isDisplayed()
-                    && getPageTitle().equals("Products");
+                    && getPageTitle().equals(PRODUCTS_PAGE_TITLE);
         } catch (Exception e) {
             return false;
         }
