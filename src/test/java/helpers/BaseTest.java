@@ -14,7 +14,6 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 
 import java.time.Duration;
-import java.util.concurrent.TimeUnit;
 
 public class BaseTest {
 
@@ -24,52 +23,70 @@ public class BaseTest {
     @BeforeEach
     public void setUp() {
         config = ConfigFactory.create(TestConfig.class);
-        driver = createDriver(config.browser());
+
+        // Автоматически включаем headless, если мы в Docker
+        boolean isDocker = System.getenv("DOCKER_ENV") != null;
+        boolean headless = isDocker || config.headless();
+
+        driver = createDriver(config.browser(), headless);
 
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(config.timeout()));
     }
 
-    private WebDriver createDriver(String browserType) {
+    private WebDriver createDriver(String browserType, boolean headless) {
         switch (browserType.toLowerCase()) {
             case "firefox":
-                return createFirefoxDriver();
+                return createFirefoxDriver(headless);
             case "edge":
-                return createEdgeDriver();
+                return createEdgeDriver(headless);
             case "chrome":
             default:
-                return createChromeDriver();
+                return createChromeDriver(headless);
         }
     }
 
-    private WebDriver createChromeDriver() {
+    private WebDriver createChromeDriver(boolean headless) {
         WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
-        if (config.headless()) {
+
+        if (headless) {
             options.addArguments("--headless");
+            // Важно для Linux-контейнеров:
+            options.addArguments("--no-sandbox");          // Обязательно для Docker
+            options.addArguments("--disable-dev-shm-usage"); // Для работы в ограниченной памяти
+            options.addArguments("--disable-gpu");         // Для совместимости
         }
+
         options.addArguments("--start-maximized");
         options.addArguments("--remote-allow-origins=*");
+
         return new ChromeDriver(options);
     }
 
-    private WebDriver createFirefoxDriver() {
+    private WebDriver createFirefoxDriver(boolean headless) {
         WebDriverManager.firefoxdriver().setup();
         FirefoxOptions options = new FirefoxOptions();
-        if (config.headless()) {
+
+        if (headless) {
             options.addArguments("--headless");
         }
+
         options.addArguments("--start-maximized");
+
         return new FirefoxDriver(options);
     }
 
-    private WebDriver createEdgeDriver() {
+    private WebDriver createEdgeDriver(boolean headless) {
         WebDriverManager.edgedriver().setup();
         EdgeOptions options = new EdgeOptions();
-        if (config.headless()) {
+
+        if (headless) {
             options.addArguments("--headless");
         }
+
         options.addArguments("--start-maximized");
+
         return new EdgeDriver(options);
     }
 

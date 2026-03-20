@@ -2,7 +2,10 @@ package config;
 
 import org.aeonbits.owner.Config;
 
-@Config.Sources({"classpath:test-config.properties"})
+@Config.Sources({
+        "classpath:test-config-${env}.properties",
+        "classpath:test-config.properties"
+})
 public interface TestConfig extends Config {
 
     @Key("browser")
