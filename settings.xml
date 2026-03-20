@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+  
+  <!-- Убираем mirror на HTTP - он больше не работает! -->
+  <!-- Maven Central теперь только HTTPS -->
+  
+  <profiles>
+    <profile>
+      <id>insecure</id>
+      <properties>
+        <!-- Отключаем проверку SSL для HTTPS (но используем сам HTTPS) -->
+        <maven.wagon.http.ssl.insecure>true</maven.wagon.http.ssl.insecure>
+        <maven.wagon.http.ssl.allowall>true</maven.wagon.http.ssl.allowall>
+        <maven.wagon.http.ssl.ignore.validity.dates>true</maven.wagon.http.ssl.ignore.validity.dates>
+        
+        <!-- Увеличиваем таймауты для надежности -->
+        <maven.wagon.httpconnectionManager.maxTotal>100</maven.wagon.httpconnectionManager.maxTotal>
+        <maven.wagon.httpconnectionManager.ttlSeconds>120</maven.wagon.httpconnectionManager.ttlSeconds>
+        <maven.wagon.http.retryHandler.count>3</maven.wagon.http.retryHandler.count>
+        <maven.wagon.http.pool>false</maven.wagon.http.pool>
+      </properties>
+    </profile>
+  </profiles>
+  
+  <activeProfiles>
+    <activeProfile>insecure</activeProfile>
+  </activeProfiles>
+</settings>
