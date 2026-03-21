@@ -1,5 +1,5 @@
 pipeline {
-    agent { label 'docker' }  // ← меняем с 'windows' на 'docker'
+    agent { label 'windows' }
 
     environment {
         IMAGE_NAME = 'saucedemo-tests'
@@ -9,8 +9,8 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Собираем образ (Linux shell)
-                    sh "docker build -t ${IMAGE_NAME}:${BUILD_NUMBER} ."
+                    // Собираем образ
+                    bat "docker build -t ${IMAGE_NAME}:${BUILD_NUMBER} ."
                 }
             }
         }
@@ -18,10 +18,10 @@ pipeline {
         stage('Run Tests') {
             steps {
                 script {
-                    // Запускаем тесты с headless (Linux пути)
-                    sh """
+                    // Запускаем тесты с headless
+                    bat """
                         docker run --rm \
-                        -v ${WORKSPACE}/target/allure-results:/tests/target/allure-results \
+                        -v ${WORKSPACE}\\target\\allure-results:/tests/target/allure-results \
                         -e MAVEN_OPTS="-Dheadless=true" \
                         ${IMAGE_NAME}:${BUILD_NUMBER}
                     """
@@ -31,7 +31,7 @@ pipeline {
 
         stage('Publish Allure Report') {
             steps {
-                // Публикуем отчет (путь остается без изменений)
+                // Публикуем отчет
                 allure includeProperties: false,
                        results: [[path: 'target/allure-results']]
             }
