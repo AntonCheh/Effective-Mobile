@@ -65,6 +65,17 @@ public class LoginTests extends CheckLoginTests {
     public void performanceGlitchUserTest(LoginTestsSource testsSource) {
         executePerformanceGlitch(testsSource);
     }
+
+    @TmsLink("https://www.saucedemo.com/")
+    @DisplayName("Логин performance_glitch_user")
+    @ParameterizedTest(name = "{displayName}")
+    @Severity(SeverityLevel.CRITICAL)
+    @MethodSource("dataWithTimeOut")
+    @Tag("Positive")
+    @Tag("Smoke")
+    public void performanceGlitchUserTest2(LoginTestsSource testsSource) {
+        executePerformanceGlitch(testsSource);
+    }
 }
 
 
