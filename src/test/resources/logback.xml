@@ -41,7 +41,7 @@
         <appender-ref ref="ALLURE"/>
     </logger>
 
-    <logger name="LoginTests" level="INFO" additivity="false">
+    <logger name="selenium.tests.effective_mobile.LoginTests" level="INFO" additivity="false">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILE"/>
         <appender-ref ref="ALLURE"/>
