@@ -13,6 +13,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import selenium.utils.AssertionHelper;
 import selenium.utils.PopupHelper;
+import selenium.utils.ShopFilterHelper;
 
 import java.time.Duration;
 import java.util.List;
@@ -37,6 +38,8 @@ public abstract class BasePage {
     protected final VerificationActions verificationActions;
     protected final AssertionHelper assertionHelper;
     protected final PopupHelper popupHelper;
+    protected final ShopFilterHelper shopFilter;  // ← Добавляем
+
 
 
     // Стандартный Actions из Selenium
@@ -68,7 +71,7 @@ public abstract class BasePage {
         this.filterActions = new FilterSeleniumActions(driver, wait, scrollActions, waitActions, assertionHelper);
         this.searchActions = new SearchSeleniumActions(driver, wait, elementActions, waitActions, pageLoadActions);
         this.verificationActions = new VerificationSeleniumActions(driver, waitActions);
-
+        this.shopFilter = new ShopFilterHelper(driver, wait, scrollActions, waitActions, assertionHelper);
 
 
         PageFactory.initElements(driver, this);
