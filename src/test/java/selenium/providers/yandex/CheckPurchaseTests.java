@@ -23,7 +23,6 @@ public class CheckPurchaseTests extends BaseTest implements DataForYandexPurchas
     private final AssertionsWeb assertionsWeb;
     private final TestConfig config;
 
-
     public CheckPurchaseTests(AssertionsWeb assertionsWeb) {
 
         this.assertionsWeb = assertionsWeb;
@@ -115,24 +114,19 @@ public class CheckPurchaseTests extends BaseTest implements DataForYandexPurchas
         softAssert.executeStep(() ->
                 page.goToAllLaptops(), "Переход в " + testsSource.laptopTitles());
 
-        // 2. Проверка заголовка
-//        softAssert.executeStep(
-//                () -> assertionsWeb.assertPageExist(testsSource.laptopTitles()),
-//                "Проверка заголовка");
-
-        // 3. Установка фильтров
+        // 2. Установка фильтров
         softAssert.executeStep(
                 () -> page.setParameterPrice(testsSource.priceMin(), testsSource.priceMax()),
                 "Установка цены"
         );
 
-        // 4. Выбор брендов
+        // 3. Выбор брендов
         softAssert.executeStep(
                 () -> selectedBrands.addAll(page.setParameterBrand(testsSource.producer(), true)),
                 "Выбор производителей"
         );
 
-
+        // 4. Получение типов брендов и их цен
         Map<String, List<String>> data = page.getProductNamesAndPrices();
         List<String> productNames = data.get("names");
         List<String> prices = data.get("prices");
@@ -141,18 +135,16 @@ public class CheckPurchaseTests extends BaseTest implements DataForYandexPurchas
                 () -> assertionsWeb.assertCountGreaterThan(12, productNames.size()),
                 "Проверка количества товаров"
         );
-
         softAssert.executeStep(
                 () -> assertionsWeb.assertProductNamesContainBrands(productNames, testsSource.producer()),
                 "Проверка количества товаров"
         );
-
         softAssert.executeStep(
                 () -> assertionsWeb.assertPricesInRange(prices, testsSource.priceMin(), testsSource.priceMax()),
                 "Проверка диапазона цен"
         );
 
-        // 6. Поиск первого товара
+        // 5. Поиск первого товара
         String firstElement = page.getFirstProductName();
 
         softAssert.executeStep(
@@ -160,6 +152,7 @@ public class CheckPurchaseTests extends BaseTest implements DataForYandexPurchas
                 "Поиск первого товара"
         );
 
+        // 6. Проверка наличия товара в результатах
         softAssert.executeStep(
                 () -> page.verifySearchResultsContainProduct(firstElement),
                 "Проверка наличия товара в результатах"
